@@ -86,17 +86,17 @@ function init() {
 
 	// model
 	var sprite = THREE.ImageUtils.loadTexture( "tex/disc.png" );
-	var company = THREE.ImageUtils.loadTexture( "tex/company.png" );
-	//material = new THREE.PointCloudMaterial( { vertexColors: THREE.VertexColors, size: 4, sizeAttenuation: false, map: sprite, alphaTest: 0.5, transparent: true } );
-	material = new THREE.PointCloudMaterial( { size: 3.5, sizeAttenuation: false, map: sprite, alphaTest: 0.5, transparent: true, vertexColors: THREE.VertexColors } );
 
-	//material.color.setHSL( 0.57, 1, 0.6 );
 
-	var crateMaterial = new THREE.SpriteMaterial( { map: company, useScreenCoordinates: false, color: 0xffffff } );
-	var sprite2 = new THREE.Sprite( crateMaterial );
-	sprite2.position.set( -15, -20, -50 );
-	sprite2.scale.set( 50, 16, 1.0 ); // imageWidth, imageHeight
-	scene.add( sprite2 );
+	var plane_tex = THREE.ImageUtils.loadTexture( "tex/block.png" );
+	var plane_material = new THREE.SpriteMaterial( { map: plane_tex, useScreenCoordinates: false, color: 0xffffff } );
+	var plane_obj = [];
+	for (var i = 1; i <=15; i++) {
+		plane_obj[i] = new THREE.Sprite( plane_material );
+		plane_obj[i].position.set( Math.random()*50-25, Math.random()*50-25, Math.random()*50 );
+		plane_obj[i].scale.set( 16, 10, 1 ); // imageWidth, imageHeight
+		scene.add( plane_obj[i] );
+	};
 
 	var loader = new THREE.OBJLoader( manager );
 
@@ -209,171 +209,3 @@ function render() {
 
 }
 
-/////////////////////////////// New CODE ////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////
-//		APP										//
-//////////////////////////////////////////////////////////////////////////////////
-	
-	var dest;
-	var flag = 0;
-	var others;
-	var curr;
-	var currGeom;
-	var deltaC = 0.002;
-	var deltaD = 0.006;
-
-
-	function flag(){
-		flag = 1;
-	}
-
-	
-				if (i < Math.min(pmesh.geometry.vertices.length, vl)) {
-
-					rs = 1;
-					kx[i] =  (vertices[i].x - pmesh.geometry.vertices[i].x)/n*rs;
-					ky[i] =  (vertices[i].y - pmesh.geometry.vertices[i].y)/n*rs;
-					kz[i] =  (vertices[i].z - pmesh.geometry.vertices[i].z)/n*rs;
-					console.log(kx[i], i, rs);
-
-				}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		Additional Controls						//
-//////////////////////////////////////////////////////////////////////////////////
-
-
-	$('.navi').click(function() {
-		//dt = 0;
-		
-		others = curr;
-		dest = curr;
-
-		for (var i = dest.geometry.vertices.length - 1; i >= 0; i--) {
-			dvel[i] = Math.random()*0.4+0.2;
-		}
-
-	});
-
-	$('#home').click(function() {
-		curr = mesh2;
-		currGeom = geometry2;
-
-
-	});
-
-	$('#info').click(function() {
-		curr = mesh1;
-		currGeom = geometry;
-
-	});
-
-	$('#projects').click(function() {
-		curr = mesh3;
-		currGeom = geometry3;
-
-	});
-
-	$('#team').click(function() {
-		curr = mesh4;
-		currGeom = geometry4;
-	});
-
-	$('#news').click(function() {
-		curr = mesh5;
-		currGeom = geometry5;
-	});
-
-
-
-
-
-	particles2.on('click', function(){
-	    particles2.scale.x *= 2;
-	});
-
-	//////////////////////////////////////////////////////////////////////////////////
-//		RENDER						//
-//////////////////////////////////////////////////////////////////////////////////
-
-	animate();
-	function animate() {
-
-	requestAnimationFrame( animate );
-
-						console.log(assetsLoadedCount);
-
-
-
-	if (assetsLoadedCount != 6) {
-		dest = pmesh3;
-		others = pmesh2;
-		curr = pmesh;
-		currGeom = pgeom;
-	} else {
-		if ((assetsLoadedCount == 6) && (flag != 1)) {
-			$('.deflector').css('opacity','0');
-			dest = pmesh;
-			others = pmesh2;
-			curr = mesh2;
-			currGeom = geometry2;
-			flag = 1;
-		}
-	}
-
-		dest.geometry.verticesNeedUpdate = true;
-		curr.geometry.verticesNeedUpdate = true;
-		others.geometry.verticesNeedUpdate = true;
-
-		if (deltaD < 0.006) {
-			deltaD += 0.0001;
-		}
-
-		if (deltaC > 0.002) {
-			deltaC -= 0.0001;
-		}
-
-		dest.rotation.y += deltaD;
-		curr.rotation.y -= deltaC;
-
-		/*if (dest.scale.x <2) {
-			dest.scale.x = dest.scale.y = dest.scale.z += 0.1;
-		}
-
-		if (curr.scale.x >1) {
-			curr.scale.x = curr.scale.y = curr.scale.z -= 0.1;
-		}*/
-
-
-		for (var i = dest.geometry.vertices.length - 1; i >= 0; i--) {
-			if (dest.geometry.vertices[i].y > ground){
-				dest.geometry.vertices[i].y -= dvel[i];
-			}
-		}
-
-		for (var i = curr.geometry.vertices.length - 1; i >= 0; i--) {
-			if (curr.geometry.vertices[i].y < currGeom.vertices[i].y){
-				curr.geometry.vertices[i].y += Math.random()*1.4+0.3;
-			}
-		}
-
-		for (var i = others.geometry.vertices.length - 1; i >= 0; i--) {
-			if (others.geometry.vertices[i].y > ground){
-				others.geometry.vertices[i].y -= Math.random()*1.4+0.3;
-			}
-		}
-
-
-		//console.log('dest.rotation:', dest.rotation.y,'currGeom:', currGeom.vertices.length,'curr.geometry:', curr.geometry.vertices.length);
-
-
-		//console.log(currGeom.vertices.length, currGeom);
-
-
-
-		/*h += Math.PI/180*2;
-
-		hue = Math.cos(h*0.01)*1;
-		console.log(hue);
-		material.color.setHSL( hue, 0.4, 0.3 );
