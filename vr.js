@@ -1,3 +1,48 @@
+//################################## API #################################
+$( document ).ready(function() {
+
+	var IE = document.all?true:false;
+	if (!IE) document.captureEvents(Event.MOUSEMOVE)
+	document.onmousemove = getMouseXY;
+
+	var tempBoost = 0;
+	var tempStatic = 0;
+	var tempX = document.body.width/2;
+	var tempY = document.body.height/2;
+	function getMouseXY(e) {
+	if (IE) { // grab the x-y pos.s if browser is IE
+		tempX = event.clientX + document.body.scrollLeft;
+		tempY = event.clientY + document.body.scrollTop;
+	}
+	else { // grab the x-y pos.s if browser is NS
+		tempX = e.pageX;
+		tempY = e.pageY;
+
+		var layer5Ratio = -10;
+		var layer4Ratio = -20;
+		var layer3Ratio = -40;
+		var layer2Ratio = -30;
+		var layer1Ratio = -50;
+	} 
+
+	var tempBoost = ($(window).width()-960)/2;
+
+	if (tempX < 0){tempX = 0;}
+	if (tempY < 0){tempY = 0;} 
+
+	$(".layer5").css("transform", "translate("+tempX/layer5Ratio+"px,"+tempStatic/layer5Ratio+"px)");
+	$(".layer4").css("transform", "translate("+tempX/layer4Ratio+"px,"+tempStatic/layer4Ratio+"px)");
+	$(".layer3").css("transform", "translate("+tempX/layer3Ratio+"px,"+tempStatic/layer3Ratio+"px)");
+	$(".layer2").css("transform", "translate("+tempX/layer2Ratio+"px,"+tempStatic/layer2Ratio+"px)");
+	$(".layer1").css("transform", "translate("+tempX/layer1Ratio+"px,"+tempStatic/layer1Ratio+"px)");
+
+	return true;
+	}
+
+});
+
+//################################# THREE.JS ###############################
+/*
 var container;
 
 var camera, scene, renderer;
@@ -57,9 +102,9 @@ function init() {
 		console.log( item, loaded, total );
 
 	};
-
+*/
 	/*var texture = new THREE.Texture();*/
-
+/*
 	var onProgress = function ( xhr ) {
 		if ( xhr.lengthComputable ) {
 			var percentComplete = xhr.loaded / xhr.total * 100;
@@ -70,21 +115,6 @@ function init() {
 	var onError = function ( xhr ) {
 	};
 
-	/*var onLoad = function() {
-		$('.deflector').css('opacity','0');
-		animate();
-	}*/
-
-
-	/*var loader = new THREE.ImageLoader( manager );
-	loader.load( 'textures/UV_Grid_Sm.jpg', function ( image ) {
-
-		texture.image = image;
-		texture.needsUpdate = true;
-
-	} );*/
-
-	// model
 	var sprite = THREE.ImageUtils.loadTexture( "tex/disc.png" );
 
 
@@ -94,7 +124,7 @@ function init() {
 	for (var i = 1; i <=15; i++) {
 		plane_obj[i] = new THREE.Sprite( plane_material );
 		plane_obj[i].position.set( Math.random()*50-25, Math.random()*50-25, Math.random()*50 );
-		plane_obj[i].scale.set( 16, 10, 1 ); // imageWidth, imageHeight
+		plane_obj[i].scale.set( 32, 20, 1 ); // imageWidth, imageHeight
 		scene.add( plane_obj[i] );
 	};
 
@@ -105,8 +135,6 @@ function init() {
 		object.traverse( function ( child ) {
 
 			if ( child instanceof THREE.Mesh ) {
-
-				/*child.material.map = texture;*/
 
 			}
 
@@ -150,8 +178,6 @@ function init() {
 				    }
 
 		} );
-
-		//scene.add( object );
 
 	}, onProgress, onError );
 
@@ -209,3 +235,4 @@ function render() {
 
 }
 
+*/
